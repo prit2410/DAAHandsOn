@@ -19,4 +19,5 @@ from small (array of size 5,10,20) all the way up to large arrays (where your co
 
 Solution:
 3. DAA Hands On 2/Benchmark.py & DAA Hands On 2/SortingPerformanceResults.xlsx
-![image](https://github.com/user-attachments/assets/e3fad8f8-36b6-4f5d-8b43-a02b4a23bab2)
+![image](https://github.com/user-attachments/assets/65c3c359-3b17-4284-b669-8d65751ffdf2)
+
