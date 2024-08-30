@@ -1,88 +1,77 @@
+import random
+import timeit
+import numpy as npy
+import matplotlib.pyplot as pltlb
 import platform
 import psutil
-import random
-import time
-import matplotlib.pyplot as plt
 
-def selection_sort(arr):
-    for i in range(len(arr)):
-        min_idx = i
-        for j in range(i + 1, len(arr)):
-            if arr[j] < arr[min_idx]:
-                min_idx = j
-        arr[i], arr[min_idx] = arr[min_idx], arr[i]
-
-def insertion_sort(arr):
-    for i in range(1, len(arr)):
-        key = arr[i]
-        j = i - 1
-        while j >= 0 and key < arr[j]:
-            arr[j + 1] = arr[j]
-            j -= 1
-        arr[j + 1] = key
-
-def bubble_sort(arr):
-    n = len(arr)
-    for i in range(n):
-        swapped = False
+def bubble_sort_implementation(a):
+    n = len(a)
+    for i in range(n - 1):
         for j in range(0, n - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-                swapped = True
-        if not swapped:
-            break
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
 
-def benchmark_sorting_algorithms():
-    sizes = [5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]  # Varying input sizes
-    insertion_times = []
-    selection_times = []
-    bubble_times = []
+def selection_sort_implementation(a):
+    for i in range(len(a)):
+        small = i
+        for j in range(i + 1, len(a)):
+            if a[j] < a[small]:
+                small = j
+        a[i], a[small] = a[small], a[i]
 
-    for size in sizes:
-        arr = [random.randint(1, 10000) for _ in range(size)]
+def insertion_sort_implementation(a):
+    for i in range(1, len(a)):
+        key = a[i]
+        j = i - 1
+        while j >= 0 and key < a[j]:
+            a[j + 1] = a[j]
+            j -= 1
+        a[j + 1] = key
 
-        start_time = time.time()
-        insertion_sort(arr.copy())
-        insertion_times.append(time.time() - start_time)
+def generate_random_array(size):
+    return [random.uniform(0, 1000) for _ in range(size)]  # Generating float values between 0 and 1000
 
-        start_time = time.time()
-        selection_sort(arr.copy())
-        selection_times.append(time.time() - start_time)
+def benchmark_sorting_algorithm(algorithm, input_sizes):
+    execution_times = []
 
-        start_time = time.time()
-        bubble_sort(arr.copy())
-        bubble_times.append(time.time() - start_time)
+    for size in input_sizes:
+        arr = generate_random_array(size)
+        time_taken = timeit.timeit(lambda: algorithm(arr.copy()), number=1)
+        execution_times.append((size, time_taken))
 
-    # Plotting the results
-    plt.figure(figsize=(12, 8))
-    plt.plot(sizes, insertion_times, label="Insertion Sort", marker='o')
-    plt.plot(sizes, selection_times, label="Selection Sort", marker='o')
-    plt.plot(sizes, bubble_times, label="Bubble Sort", marker='o')
-    plt.xlabel("Input Size (n)")
-    plt.ylabel("Time (seconds)")
-    plt.title("Benchmarking Sorting Algorithms")
-    plt.legend()
-    plt.grid(True)
-    plt.xscale("log")  # Use log scale for better visualization
-    plt.yscale("log")
+    return execution_times
 
-    # Get system information
-    my_system = platform.uname()
-    system_info = (
-        f"System: {my_system.system}\n"
-        f"Node Name: {my_system.node}\n"
-        f"Release: {my_system.release}\n"
-        f"Machine: {my_system.machine}\n"
-        f"Processor: {my_system.processor}\n"
-        f"CPU: {psutil.cpu_count()} cores\n"
-        f"RAM: {psutil.virtual_memory().total / (1024 ** 3):.2f} GB"
-    )
+input_sizes = [5, 10, 20, 100, 1000, 2000]
+algorithms = [insertion_sort_implementation, selection_sort_implementation, bubble_sort_implementation]
+pltlb.figure(figsize=(10, 6))
 
-    # Display system information as text in a box
-    plt.figtext(0.99, 0.01, system_info, horizontalalignment='right', fontsize=10,
-                bbox=dict(facecolor='lightgray', alpha=0.5))
+for algorithm in algorithms:
+    times_for_algorithm = benchmark_sorting_algorithm(algorithm, input_sizes)
+    sizes, times = zip(*times_for_algorithm)
+    pltlb.plot(sizes, times, label=algorithm.__name__, marker='o')
 
-    plt.show()
+pltlb.xlabel('Input Size of Array')
+pltlb.ylabel('Time Taken for Execution (s)')
+pltlb.title('Benchmark for Insertion, Selection, and Bubble Sort Algorithms')
+pltlb.legend()
 
-# Run the benchmark
-benchmark_sorting_algorithms()
+# Get system information
+my_system = platform.uname()
+system_info = (
+    f"System: {my_system.system}\n"
+    f"Node Name: {my_system.node}\n"
+    f"Release: {my_system.release}\n"
+    f"Machine: {my_system.machine}\n"
+    f"Processor: {my_system.processor}\n"
+    f"CPU: {psutil.cpu_count()} cores\n"
+    f"RAM: {psutil.virtual_memory().total / (1024 ** 3):.2f} GB"
+)
+
+# Display system information as text in a box on the plot
+pltlb.text(0.95, 0.05, system_info, transform=pltlb.gca().transAxes, fontsize=10,
+         verticalalignment='bottom', horizontalalignment='right',
+         bbox=dict(facecolor='white', alpha=0.5))
+
+pltlb.grid(True)
+pltlb.show()
