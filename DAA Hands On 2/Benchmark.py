@@ -1,77 +1,87 @@
 import random
 import timeit
-import numpy as npy
-import matplotlib.pyplot as pltlb
 import platform
 import psutil
+import matplotlib.pyplot as plt
 
-def bubble_sort_implementation(a):
-    n = len(a)
-    for i in range(n - 1):
-        for j in range(0, n - i - 1):
-            if a[j] > a[j + 1]:
-                a[j], a[j + 1] = a[j + 1], a[j]
-
-def selection_sort_implementation(a):
-    for i in range(len(a)):
-        small = i
-        for j in range(i + 1, len(a)):
-            if a[j] < a[small]:
-                small = j
-        a[i], a[small] = a[small], a[i]
-
-def insertion_sort_implementation(a):
-    for i in range(1, len(a)):
-        key = a[i]
+# Implementing the sorting algorithms
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
         j = i - 1
-        while j >= 0 and key < a[j]:
-            a[j + 1] = a[j]
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
             j -= 1
-        a[j + 1] = key
+        arr[j + 1] = key
 
+def selection_sort(arr):
+    for i in range(len(arr)):
+        min_idx = i
+        for j in range(i + 1, len(arr)):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+# Generate random array
 def generate_random_array(size):
-    return [random.uniform(0, 1000) for _ in range(size)]  # Generating float values between 0 and 1000
+    return [random.uniform(0, 1000) for _ in range(size)]
 
+# Benchmark sorting algorithms
 def benchmark_sorting_algorithm(algorithm, input_sizes):
     execution_times = []
-
     for size in input_sizes:
         arr = generate_random_array(size)
         time_taken = timeit.timeit(lambda: algorithm(arr.copy()), number=1)
         execution_times.append((size, time_taken))
-
     return execution_times
 
-input_sizes = [5, 10, 20, 100, 1000, 2000]
-algorithms = [insertion_sort_implementation, selection_sort_implementation, bubble_sort_implementation]
-pltlb.figure(figsize=(10, 6))
+# System information
+def get_system_info():
+    my_system = platform.uname()
+    return (
+        f"System: {my_system.system}\n"
+        f"Node Name: {my_system.node}\n"
+        f"Release: {my_system.release}\n"
+        f"Machine: {my_system.machine}\n"
+        f"Processor: {my_system.processor}\n"
+        f"CPU: {psutil.cpu_count(logical=False)} physical cores, {psutil.cpu_count(logical=True)} logical cores\n"
+        f"RAM: {psutil.virtual_memory().total / (1024 ** 3):.2f} GB"
+    )
 
-for algorithm in algorithms:
-    times_for_algorithm = benchmark_sorting_algorithm(algorithm, input_sizes)
-    sizes, times = zip(*times_for_algorithm)
-    pltlb.plot(sizes, times, label=algorithm.__name__, marker='o')
+# Plotting the results
+def plot_benchmark_results(algorithms, input_sizes):
+    plt.figure(figsize=(10, 6))
 
-pltlb.xlabel('Input Size of Array')
-pltlb.ylabel('Time Taken for Execution (s)')
-pltlb.title('Benchmark for Insertion, Selection, and Bubble Sort Algorithms')
-pltlb.legend()
+    for algorithm in algorithms:
+        times_for_algorithm = benchmark_sorting_algorithm(algorithm, input_sizes)
+        sizes, times = zip(*times_for_algorithm)
+        plt.plot(sizes, times, label=algorithm.__name__, marker='o')
 
-# Get system information
-my_system = platform.uname()
-system_info = (
-    f"System: {my_system.system}\n"
-    f"Node Name: {my_system.node}\n"
-    f"Release: {my_system.release}\n"
-    f"Machine: {my_system.machine}\n"
-    f"Processor: {my_system.processor}\n"
-    f"CPU: {psutil.cpu_count()} cores\n"
-    f"RAM: {psutil.virtual_memory().total / (1024 ** 3):.2f} GB"
-)
+    plt.xlabel('Input Size of Array')
+    plt.ylabel('Time Taken for Execution (s)')
+    plt.title('Benchmark for Insertion, Selection, and Bubble Sort Algorithms')
+    plt.legend()
 
-# Display system information as text in a box on the plot
-pltlb.text(0.95, 0.05, system_info, transform=pltlb.gca().transAxes, fontsize=10,
-         verticalalignment='bottom', horizontalalignment='right',
-         bbox=dict(facecolor='white', alpha=0.5))
+    # Display system information on the plot
+    system_info = get_system_info()
+    plt.text(0.02, 0.68, system_info, transform=plt.gca().transAxes, fontsize=9,
+             bbox=dict(facecolor='white', alpha=0.8))
 
-pltlb.grid(True)
-pltlb.show()
+    plt.grid(True)
+    plt.show()
+
+# Input sizes for benchmarking
+input_sizes = [5, 10, 20, 100, 1000, 2000, 5000, 10000]
+
+# Sorting algorithms to be benchmarked
+algorithms = [insertion_sort, selection_sort, bubble_sort]
+
+# Plot the benchmark results
+plot_benchmark_results(algorithms, input_sizes)
