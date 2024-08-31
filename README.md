@@ -1,4 +1,4 @@
-Implement: Solution: DAA Hands On 2/SortingAlgorithm.py
+Implement: Solution: DAA Hands On 2/Benchmark.py
 
 1. insertion sort
 
@@ -18,6 +18,8 @@ In the discussion:
 from small (array of size 5,10,20) all the way up to large arrays (where your computer is struggling). I should at the very least see a plot of time vs input size n. Feel free to use benchmarking software.
 
 Solution:
-3. DAA Hands On 2/Benchmark.py & DAA Hands On 2/SortingPerformanceResults.xlsx
-![image](https://github.com/user-attachments/assets/65c3c359-3b17-4284-b669-8d65751ffdf2)
+3. DAA Hands On 2/Benchmark.py
+
+![image](https://github.com/user-attachments/assets/64699f38-461a-4696-bd3a-b81bd56956cf)
+
 
