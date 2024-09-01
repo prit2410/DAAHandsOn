@@ -20,6 +20,7 @@ from small (array of size 5,10,20) all the way up to large arrays (where your co
 Solution:
 3. DAA Hands On 2/Benchmark.py
 
-![image](https://github.com/user-attachments/assets/64699f38-461a-4696-bd3a-b81bd56956cf)
+![image](https://github.com/user-attachments/assets/bba33b06-b116-484b-afd1-1883adf5ab16)
+
 
 
