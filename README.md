@@ -20,7 +20,13 @@ from small (array of size 5,10,20) all the way up to large arrays (where your co
 Solution:
 3. DAA Hands On 2/Benchmark.py
 
-![image](https://github.com/user-attachments/assets/7fdb5ec9-7b5a-4fc2-a994-84dcb5ef40d5)
+System Information:
+Processor: Intel64 Family 6 Model 165 Stepping 2, GenuineIntel
+RAM: 7.91 GB
+CPU Count: 8
+Python Version: 3.9.13
+
+![image](https://github.com/user-attachments/assets/be2ef6f3-8d3b-472b-ae9a-bc91247f8f42)
 
 
 
