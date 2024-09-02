@@ -27,7 +27,8 @@ RAM: 7.91 GB
 CPU Count: 8
 Python Version: 3.9.13
 
-![image](https://github.com/user-attachments/assets/be2ef6f3-8d3b-472b-ae9a-bc91247f8f42)
+![image](https://github.com/user-attachments/assets/2896d4ec-19c6-4e9e-96ce-017c63d5dc3b)
+
 
 
 
