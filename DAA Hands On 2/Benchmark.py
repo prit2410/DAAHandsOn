@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 # System Information
 def get_system_info():
     system_info = {
+        "PC Name": platform.node(),
         "Processor": platform.processor(),
         "RAM": f"{round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB",
         "CPU Count": psutil.cpu_count(logical=True),
@@ -46,7 +47,7 @@ def bubble_sort(arr):
     n = len(arr)
     for i in range(n):
         for j in range(0, n - i - 1):
-            if arr[j] > arr[j + 1]:
+            if arr[j] > arr[j + 1]:  # Corrected this line
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
     return arr
 
@@ -81,18 +82,17 @@ def benchmark_sorting_algorithms():
     plt.yscale("log")
     plt.legend()
     plt.grid(True)
-
-    # Display system information on the chart (right bottom corner)
-    system_info = get_system_info()
-    system_text = '\n'.join([f'{key}: {value}' for key, value in system_info.items()])
-    plt.gcf().text(0.98, 0.02, system_text, fontsize=10, bbox=dict(facecolor='white', alpha=0.5), ha='right')
-
     plt.show()
 
 
 # Main execution
 if __name__ == "__main__":
-    print("Running benchmarks...\n")
+    # Display system information
+    system_info = get_system_info()
+    print("System Information:")
+    for key, value in system_info.items():
+        print(f"{key}: {value}")
+    print("\nRunning benchmarks...\n")
 
     # Run the benchmark
     benchmark_sorting_algorithms()
