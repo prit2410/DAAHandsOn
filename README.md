@@ -1,12 +1,12 @@
-Implement: Solution: DAA Hands On 2/Benchmark.py
+Implement: 
 
-1. insertion sort
+1. insertion sort: DAA Hands On 2/insertionSort.py
 
-2. selection sort
+2. selection sort: DAA Hands On 2/selectionSort.py
 
-3. bubble sort
+3. bubble sort: DAA Hands On 2/bubbleSort.py
 
- 
+
 
 In the discussion:
 
