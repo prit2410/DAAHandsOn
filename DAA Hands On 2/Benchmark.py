@@ -1,98 +1,98 @@
+import time
 import random
-import timeit
 import platform
 import psutil
 import matplotlib.pyplot as plt
 
-# Define sorting algorithms
+
+# System Information
+def get_system_info():
+    system_info = {
+        "Processor": platform.processor(),
+        "RAM": f"{round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB",
+        "CPU Count": psutil.cpu_count(logical=True),
+        "Python Version": platform.python_version()
+    }
+    return system_info
+
+
+# Insertion Sort
 def insertion_sort(arr):
-    for i in range(1, len(arr)):
+    n = len(arr)
+    for i in range(1, n):
         key = arr[i]
         j = i - 1
         while j >= 0 and key < arr[j]:
             arr[j + 1] = arr[j]
             j -= 1
         arr[j + 1] = key
+    return arr
 
+
+# Selection Sort
 def selection_sort(arr):
-    for i in range(len(arr)):
-        min_idx = i
-        for j in range(i + 1, len(arr)):
-            if arr[j] < arr[min_idx]:
-                min_idx = j
-        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    n = len(arr)
+    for i in range(n):
+        min_index = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+    return arr
 
+
+# Bubble Sort
 def bubble_sort(arr):
     n = len(arr)
     for i in range(n):
         for j in range(0, n - i - 1):
             if arr[j] > arr[j + 1]:
                 arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
 
-# System information
-my_system = platform.uname()
-system_info = (
-    f"System: {my_system.system}\n"
-    f"Node Name: {my_system.node}\n"
-    f"Release: {my_system.release}\n"
-    f"Machine: {my_system.machine}\n"
-    f"Processor: {my_system.processor}\n"
-    f"CPU: {psutil.cpu_count()} cores"
-)
-ram_info = f"RAM: {psutil.virtual_memory().total / (1024 ** 3):.2f} GB"
 
-# Benchmark sorting algorithms
-def benchmark_sorting_algorithm(algorithm, input_sizes):
-    execution_times = []
+# Benchmarking
+def benchmark_sorting_algorithms():
+    input_sizes = [5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
+    algorithms = {
+        "Insertion Sort": insertion_sort,
+        "Selection Sort": selection_sort,
+        "Bubble Sort": bubble_sort
+    }
+
+    results = {alg: [] for alg in algorithms}
+
     for size in input_sizes:
-        arr = generate_random_array(size)
-        time_taken = timeit.timeit(lambda: algorithm(arr.copy()), number=1)
-        execution_times.append((size, time_taken))
-    return execution_times
+        arr = random.sample(range(size * 10), size)  # Generate a random array of the given size
+        for name, algorithm in algorithms.items():
+            start_time = time.time()
+            algorithm(arr.copy())  # Run the algorithm
+            elapsed_time = time.time() - start_time
+            results[name].append(elapsed_time)
 
-# Generate random array
-def generate_random_array(size):
-    return [random.uniform(0, 1000) for _ in range(size)]
+    # Plotting the results
+    plt.figure(figsize=(10, 6))
+    for name, times in results.items():
+        plt.plot(input_sizes, times, label=name, marker='o')
 
-# Input sizes for benchmarking
-input_sizes = [5, 10, 20, 100, 1000, 2000, 5000, 10000]
+    plt.title("Sorting Algorithms Runtime Benchmark")
+    plt.xlabel("Input Size (n)")
+    plt.ylabel("Time (seconds)")
+    plt.yscale("log")
+    plt.legend()
+    plt.grid(True)
 
-# Collecting data for all algorithms
-algorithms = [insertion_sort, selection_sort, bubble_sort]
-data = {}
-for algorithm in algorithms:
-    times_for_algorithm = benchmark_sorting_algorithm(algorithm, input_sizes)
-    sizes, times = zip(*times_for_algorithm)
-    data[algorithm.__name__] = times
+    # Display system information on the chart (right bottom corner)
+    system_info = get_system_info()
+    system_text = '\n'.join([f'{key}: {value}' for key, value in system_info.items()])
+    plt.gcf().text(0.98, 0.02, system_text, fontsize=10, bbox=dict(facecolor='white', alpha=0.5), ha='right')
 
-# Plotting
-plt.figure(figsize=(12, 8), facecolor='black')
+    plt.show()
 
-ax = plt.gca()
-ax.set_facecolor('black')
-ax.spines['top'].set_color('white')
-ax.spines['right'].set_color('white')
-ax.spines['bottom'].set_color('white')
-ax.spines['left'].set_color('white')
-ax.xaxis.label.set_color('white')
-ax.yaxis.label.set_color('white')
-ax.tick_params(axis='x', colors='white')
-ax.tick_params(axis='y', colors='white')
 
-line_styles = ['-', '--', '-.']
-colors = ['#1f77b4', '#ff7f0e', '#2ca02c']
+# Main execution
+if __name__ == "__main__":
+    print("Running benchmarks...\n")
 
-for i, (algorithm, times) in enumerate(data.items()):
-    plt.plot(input_sizes, times, label=algorithm, linestyle=line_styles[i], color=colors[i], marker='D')
-
-plt.xlabel('Input Size of Array', color='white')
-plt.ylabel('Time Taken for Execution (s)', color='white')
-plt.title('Benchmark for Insertion, Selection, and Bubble Sort Algorithms', color='white', fontsize=14)
-plt.legend(facecolor='black', edgecolor='white', fontsize=10)
-
-# Add system information as text annotation
-plt.text(0.02, 0.5, system_info + '\n' + ram_info, transform=plt.gca().transAxes, fontsize=10,
-         verticalalignment='top', bbox=dict(facecolor='white', alpha=0.8))
-
-plt.grid(True, color='#666666')
-plt.show()
+    # Run the benchmark
+    benchmark_sorting_algorithms()
