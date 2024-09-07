@@ -3,12 +3,29 @@ function x = f(n)
    for i = 1:n
         for j = 1:n
              x = x + 1;
-Find the runtime of the algorithm mathematically (I should see summations). (Runtime.png)
+1 Find the runtime of the algorithm mathematically (I should see summations). (Runtime.png)
+
+2 Time this function for various n e.g. n = 1,2,3.... You should have small values of n all the way up to large values. Plot "time" vs "n" (time on y-axis and n on x-axis). Also, fit a curve to your data, hint it's a polynomial.
+To measure the time taken for the function f(n), we timed the function for various values of n from small to large. The data was plotted with n on the x-axis and the time taken on the y-axis.
+Graph Interpretation:
+The plot shows a clear quadratic trend as the values of n increase, reflecting the O(n^2) complexity.
+The fitted curve is a polynomial (specifically quadratic) that closely matches the timing data points.
 
 
-Time this function for various n e.g. n = 1,2,3.... You should have small values of n all the way up to large values. Plot "time" vs "n" (time on y-axis and n on x-axis). Also, fit a curve to your data, hint it's a polynomial.
-Find polynomials that are upper and lower bounds on your curve from #2. From this specify a big-O, a big-Omega, and what big-theta is.
-Find the approximate (eye ball it) location of "n_0" . Do this by zooming in on your plot and indicating on the plot where n_0 is and why you picked this value. Hint: I should see data that does not follow the trend of the polynomial you determined in #2.
+3 Find polynomials that are upper and lower bounds on your curve from #2. From this specify a big-O, a big-Omega, and what big-theta is.
+Upper and Lower Bounds:
+Upper Bound (Big-O): The upper bound on the graph is shown by the green dashed line, which slightly exceeds the fitted curve. This indicates the function is bounded above by O(n^2).
+Lower Bound (Big-Omega): The lower bound is represented by the yellow dashed line, which lies below the fitted curve, indicating the function is bounded below by Ω(n^2).
+Tight Bound (Big-Theta):
+Since both the upper and lower bounds are quadratic and closely follow the actual timing data, the tight bound for the runtime is Θ(n^2).
+
+4 Find the approximate (eye ball it) location of "n_0" . Do this by zooming in on your plot and indicating on the plot where n_0 is and why you picked this value. Hint: I should see data that does not follow the trend of the polynomial you determined in #2.
+Identifying n0:
+On the graph, n0 is marked with a vertical dashed line at n=1800.
+This value is chosen because, around this point, the empirical data points start to follow the quadratic trend very closely. Below n=1800n = 1800n=1800, the data might show more variability due to lower values of n, potentially including overhead effects or inconsistencies.
+Once n reaches and exceeds 1800, the observed performance matches the expected n^2 complexity trend.
+n0 represents a threshold where the algorithm's performance consistently aligns with its asymptotic behaviour. Below this point, variations due to non-dominant factors might be more pronounced, but above this point, the quadratic nature is dominant and reliable.
+
 If I modified the function to be:
 x = f(n)
    x = 1;
@@ -17,8 +34,33 @@ x = f(n)
         for j = 1:n
              x = x + 1;
         y = i + j;
-4. Will this increate how long it takes the algorithm to run (e.x. you are timing the function like in #2)?
+4. Will this increase how long it takes the algorithm to run (e.x. you are timing the function like in #2)?
+Yes, adding additional operations inside the loop, even if they are simple operations like addition,
+will increase the time it takes for the algorithm to run because these operations are executed on each iteration of the loop.
+
 
 5. Will it effect your results from #1?
+No, adding the line y = i + j; will not affect the results from the runtime analysis in terms of asymptotic notation because the operation is O(1). The runtime remains O(n^2). Both the original and modified functions perform nested loops running n×n=n^2 times, with each loop operation running in constant time.
+Specific Impact:
+Big-O (Upper Bound): Remains O(n^2).
+Big-Omega (Lower Bound): Remains Ω(n^2).
+Big-Theta (Tight Bound): Remains Θ(n^2).
+The graph reflects this as the fitted curve and bounds for the modified function still closely align with a quadratic trend, confirming that the asymptotic behavior is unchanged.
 
 6. Implement merge sort, upload your code to github and show/test it on the array [5,2,4,7,1,3,2,6].
+Solution: mergeSort.py
+Splitting: [5, 2, 4, 7, 1, 3, 2, 6] -> [5, 2, 4, 7] and [1, 3, 2, 6]
+Splitting: [5, 2, 4, 7] -> [5, 2] and [4, 7]
+Splitting: [5, 2] -> [5] and [2]
+Merging: [5] and [2] -> [2, 5]
+Splitting: [4, 7] -> [4] and [7]
+Merging: [4] and [7] -> [4, 7]
+Merging: [2, 5] and [4, 7] -> [2, 4, 5, 7]
+Splitting: [1, 3, 2, 6] -> [1, 3] and [2, 6]
+Splitting: [1, 3] -> [1] and [3]
+Merging: [1] and [3] -> [1, 3]
+Splitting: [2, 6] -> [2] and [6]
+Merging: [2] and [6] -> [2, 6]
+Merging: [1, 3] and [2, 6] -> [1, 2, 3, 6]
+Merging: [2, 4, 5, 7] and [1, 2, 3, 6] -> [1, 2, 2, 3, 4, 5, 6, 7]
+Sorted array: [1, 2, 2, 3, 4, 5, 6, 7]
