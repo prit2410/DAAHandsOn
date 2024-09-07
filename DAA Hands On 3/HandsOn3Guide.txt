@@ -39,7 +39,6 @@ Yes, the modified function will take slightly more time to run because of the ad
 From the graph, you can observe that the time taken by the modified function is slightly higher compared to the original function, as seen from the blue data points, but it still follows the same overall trend (quadratic).
 
 
-
 5. Will it effect your results from #1?
 No, adding the line y = i + j; will not affect the results from the runtime analysis in terms of asymptotic notation because the operation is O(1). The runtime remains O(n^2). Both the original and modified functions perform nested loops running n×n=n^2 times, with each loop operation running in constant time.
 Specific Impact:
