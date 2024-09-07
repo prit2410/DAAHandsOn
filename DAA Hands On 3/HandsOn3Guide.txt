@@ -35,8 +35,9 @@ x = f(n)
              x = x + 1;
         y = i + j;
 4. Will this increase how long it takes the algorithm to run (e.x. you are timing the function like in #2)?
-Yes, adding additional operations inside the loop, even if they are simple operations like addition,
-will increase the time it takes for the algorithm to run because these operations are executed on each iteration of the loop.
+Yes, the modified function will take slightly more time to run because of the added operation y = i + j; within the inner loop. However, this operation is a constant time operation O (1), and since it's executed the same number of times as the other operations inside the nested loops (i.e., n2n^2n2 times), it does not change the overall asymptotic complexity. The time taken by the modified function will still be quadratic, i.e., O(n^2), but with a slightly larger constant factor due to the additional operation.
+From the graph, you can observe that the time taken by the modified function is slightly higher compared to the original function, as seen from the blue data points, but it still follows the same overall trend (quadratic).
+
 
 
 5. Will it effect your results from #1?
