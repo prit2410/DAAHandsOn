@@ -20,7 +20,7 @@ Tight Bound (Big-Theta):
 Since both the upper and lower bounds are quadratic and closely follow the actual timing data, the tight bound for the runtime is Θ(n^2).
 
 4 Find the approximate (eye ball it) location of "n_0" . Do this by zooming in on your plot and indicating on the plot where n_0 is and why you picked this value. Hint: I should see data that does not follow the trend of the polynomial you determined in #2.
-Identifying n0:
+Identifying n0: Solution: TimeTaken.png
 On the graph, n0 is marked with a vertical dashed line at n=1800.
 This value is chosen because, around this point, the empirical data points start to follow the quadratic trend very closely. Below n=1800n = 1800n=1800, the data might show more variability due to lower values of n, potentially including overhead effects or inconsistencies.
 Once n reaches and exceeds 1800, the observed performance matches the expected n^2 complexity trend.
