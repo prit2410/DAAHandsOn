@@ -45,19 +45,25 @@ class DoublyLinkedList:
         return False
 
 class HashTable:
-    def __init__(self, size=8):
+    def __init__(self, size=8, hash_function=None):
         self.size = size
         self.count = 0
-        self.table = [None] * size
+        self.table = [None] * size  # C-style array
         self.load_factor = 0.75
         self.shrink_factor = 0.25
 
-    # Hash function using multiplication method
-    def hash_function(self, key):
-        A = (5 ** 0.5 - 1) / 2  # Constant A for multiplication method
+        # Allow for a custom hash function, default to multiplication + division method
+        if hash_function:
+            self.hash_function = hash_function
+        else:
+            self.hash_function = self.multiplication_division_hash_function
+
+    # Hash function using both multiplication and division method
+    def multiplication_division_hash_function(self, key):
+        A = (5 ** 0.5 - 1) / 2  # Multiplication constant A
         return int(self.size * ((key * A) % 1))
 
-    # Generic function to insert a key-value pair
+    # Insert key-value pair
     def insert(self, key, value):
         index = self.hash_function(key)
         if self.table[index] is None:
@@ -73,16 +79,16 @@ class HashTable:
         if self.count / self.size > self.load_factor:
             self.resize(self.size * 2)
 
-    # Generic function to get a value by key
-    def get(self, key):
+    # Search for a value by key
+    def search(self, key):
         index = self.hash_function(key)
         if self.table[index] is None:
             return None
         node = self.table[index].find(key)
         return node.value if node else None
 
-    # Generic function to delete a key
-    def delete(self, key):
+    # Remove a key-value pair
+    def remove(self, key):
         index = self.hash_function(key)
         if self.table[index] is None:
             return False
@@ -97,36 +103,51 @@ class HashTable:
     def resize(self, new_size):
         old_table = self.table
         self.size = new_size
-        self.table = [None] * new_size
+        self.table = [None] * new_size  # Create a new table with the new size
         self.count = 0
 
         for chain in old_table:
             if chain:
                 current = chain.head
                 while current:
-                    self.insert(current.key, current.value)
+                    self.insert(current.key, current.value)  # Rehash all elements
                     current = current.next
 
-# Test the Hash Table implementation
-hash_table = HashTable()
+# Custom hash function example (optional, if you want to use a custom one)
+def custom_hash_function(key):
+    return key % 10
 
-# Insert some key-value pairs
-hash_table.insert(10, 100)
-hash_table.insert(20, 200)
-hash_table.insert(30, 300)
+# Example usage of the hash table
+ht = HashTable()
 
-# Retrieve values
-print(hash_table.get(10))  # Output: 100
-print(hash_table.get(20))  # Output: 200
-print(hash_table.get(30))  # Output: 300
+# Insert key-value pairs
+ht.insert(11, 110)
+ht.insert(22, 220)
+ht.insert(33, 330)
+ht.insert(44, 440)
+ht.insert(55, 550)
+ht.insert(66, 660)
+ht.insert(77, 770)
 
-# Delete a key
-hash_table.delete(20)
-print(hash_table.get(20))  # Output: None
+# Search for a value by key
+print(ht.search(11))
+print(ht.search(22))
+print(ht.search(33))
+print(ht.search(44))
+print(ht.search(55))
+print(ht.search(66))
+print(ht.search(77))
 
-# Insert more to trigger resizing
-for i in range(40, 100):
-    hash_table.insert(i, i * 10)
 
-# Check resizing and retrieval
-print(hash_table.get(40))  # Output: 400
+# Remove a key-value pair
+ht.remove(33)
+
+# Search again after removal
+print("After removing 33")
+print(ht.search(11))
+print(ht.search(22))
+print(ht.search(33))
+print(ht.search(44))
+print(ht.search(55))
+print(ht.search(66))
+print(ht.search(77))
