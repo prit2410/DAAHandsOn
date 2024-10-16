@@ -73,8 +73,8 @@ class HashTable:
         if self.count / self.size > self.load_factor:
             self.resize(self.size * 2)
 
-    # Generic function to search for a value by key
-    def search(self, key):
+    # Generic function to get a value by key
+    def get(self, key):
         index = self.hash_function(key)
         if self.table[index] is None:
             return None
@@ -82,7 +82,7 @@ class HashTable:
         return node.value if node else None
 
     # Generic function to delete a key
-    def remove(self, key):
+    def delete(self, key):
         index = self.hash_function(key)
         if self.table[index] is None:
             return False
@@ -107,23 +107,26 @@ class HashTable:
                     self.insert(current.key, current.value)
                     current = current.next
 
-# Test the Hash Table implementation with provided example
-ht = HashTable()
+# Test the Hash Table implementation
+hash_table = HashTable()
 
-# Insert key-value pairs
-ht.insert(11, 110)
-ht.insert(22, 220)
-ht.insert(33, 330)
-ht.insert(44, 440)
-ht.insert(55, 550)
-ht.insert(66, 660)
-ht.insert(77, 770)
+# Insert some key-value pairs
+hash_table.insert(10, 100)
+hash_table.insert(20, 200)
+hash_table.insert(30, 300)
 
-# Search for a value by key
-print("Value for key 33:", ht.search(33))  # Output: 330
+# Retrieve values
+print(hash_table.get(10))  # Output: 100
+print(hash_table.get(20))  # Output: 200
+print(hash_table.get(30))  # Output: 300
 
-# Remove a key-value pair
-ht.remove(33)
+# Delete a key
+hash_table.delete(20)
+print(hash_table.get(20))  # Output: None
 
-# Search again after removal
-print("Value for key 33 after removal:", ht.search(33))  # Output: None
+# Insert more to trigger resizing
+for i in range(40, 100):
+    hash_table.insert(i, i * 10)
+
+# Check resizing and retrieval
+print(hash_table.get(40))  # Output: 400
