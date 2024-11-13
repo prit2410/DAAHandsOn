@@ -1,0 +1,18 @@
+Implement the following algorithms:
+
+1. Topological sort
+Solution: topologicalSort.py
+Topological Sort: [5, 4, 2, 3, 1, 0]
+
+2. Depth-First Search
+Solution: DFS.py
+Depth-First Search from 'A':
+A B D E F C
+
+
+3. Kruskal algorithm
+Solution: kruskalAlgorithm.py
+Kruskal's MST:
+Edge 1-2 with weight 2
+Edge 0-1 with weight 4
+Edge 1-3 with weight 6
