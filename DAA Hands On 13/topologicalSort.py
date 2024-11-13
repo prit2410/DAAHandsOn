@@ -15,20 +15,33 @@ class Graph:
                 self.topological_sort_util(i, visited, stack)
         stack.insert(0, v)
 
-    def topological_sort(self):
-        visited = [False] * self.V
+    def topological_sort(self, nodes):
+        visited = {node: False for node in nodes}
         stack = []
-        for i in range(self.V):
-            if not visited[i]:
-                self.topological_sort_util(i, visited, stack)
+        for node in nodes:
+            if not visited[node]:
+                self.topological_sort_util(node, visited, stack)
         return stack
 
-# Example usage of Topological Sort
-g = Graph(6)
-g.add_edge(5, 2)
-g.add_edge(5, 0)
-g.add_edge(4, 0)
-g.add_edge(4, 1)
-g.add_edge(2, 3)
-g.add_edge(3, 1)
-print("Topological Sort:", g.topological_sort())
+# Define nodes and edges for the example
+nodes = ["undershorts", "pants", "belt", "shirt", "tie", "jacket", "socks", "shoes", "watch"]
+
+# List of directed edges
+edges = [
+    ("undershorts", "pants"),
+    ("pants", "belt"),
+    ("pants", "shoes"),
+    ("shirt", "belt"),
+    ("shirt", "tie"),
+    ("tie", "jacket"),
+    ("belt", "jacket"),
+    ("socks", "shoes")
+]
+
+# Create graph and add edges
+g = Graph(len(nodes))
+for u, v in edges:
+    g.add_edge(u, v)
+
+# Perform topological sort
+print("Topological Sort:", g.topological_sort(nodes))

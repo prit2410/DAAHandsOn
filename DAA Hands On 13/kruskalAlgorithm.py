@@ -1,13 +1,13 @@
 class Edge:
-    def __init__(self, u, v, weight):
+    def __init__(self, weight, u, v):
+        self.weight = weight
         self.u = u
         self.v = v
-        self.weight = weight
 
 class UnionFind:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.rank = [0] * n
+    def __init__(self, nodes):
+        self.parent = {node: node for node in nodes}
+        self.rank = {node: 0 for node in nodes}
 
     def find(self, u):
         if self.parent[u] != u:
@@ -26,9 +26,9 @@ class UnionFind:
                 self.parent[root_v] = root_u
                 self.rank[root_u] += 1
 
-def kruskal(n, edges):
+def kruskal(nodes, edges):
     edges = sorted(edges, key=lambda e: e.weight)
-    uf = UnionFind(n)
+    uf = UnionFind(nodes)
     mst = []
 
     for edge in edges:
@@ -38,9 +38,27 @@ def kruskal(n, edges):
 
     return mst
 
-# Example usage of Kruskal's Algorithm
-edges = [Edge(0, 1, 4), Edge(0, 2, 4), Edge(1, 2, 2), Edge(1, 3, 6), Edge(2, 3, 8)]
-mst = kruskal(4, edges)
+# Define nodes and edges for Kruskal's example
+nodes_kruskal = {"a", "b", "c", "d", "e", "f", "g", "h", "i"}
+edges_kruskal = [
+    Edge(4, "a", "b"),
+    Edge(8, "a", "h"),
+    Edge(8, "b", "c"),
+    Edge(11, "b", "h"),
+    Edge(7, "c", "d"),
+    Edge(4, "c", "f"),
+    Edge(2, "c", "i"),
+    Edge(6, "c", "g"),
+    Edge(9, "d", "e"),
+    Edge(14, "d", "f"),
+    Edge(10, "e", "f"),
+    Edge(2, "f", "g"),
+    Edge(1, "g", "h"),
+    Edge(7, "h", "i")
+]
+
+# Perform Kruskal's MST
+mst = kruskal(nodes_kruskal, edges_kruskal)
 print("Kruskal's MST:")
 for edge in mst:
     print(f"Edge {edge.u}-{edge.v} with weight {edge.weight}")

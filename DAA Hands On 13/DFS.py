@@ -1,4 +1,10 @@
-def depth_first_search(graph, start):
+from collections import defaultdict
+
+def depth_first_search(edges, start):
+    graph = defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+
     visited = set()
 
     def dfs(v):
@@ -11,14 +17,17 @@ def depth_first_search(graph, start):
     dfs(start)
     print()
 
-# Example usage of Depth-First Search
-graph = {
-    'A': ['B', 'C'],
-    'B': ['D', 'E'],
-    'C': ['F'],
-    'D': [],
-    'E': ['F'],
-    'F': []
-}
-print("Depth-First Search from 'A':")
-depth_first_search(graph, 'A')
+# Define edges for DFS example
+edges_dfs = [
+    ("u", "v"),
+    ("u", "x"),
+    ("v", "y"),
+    ("y", "x"),
+    ("x", "v"),
+    ("w", "z"),
+    ("w", "y"),
+    ("z", "z")  # self-loop
+]
+
+print("Depth-First Search from 'u':")
+depth_first_search(edges_dfs, 'u')
