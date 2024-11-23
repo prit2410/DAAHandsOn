@@ -1,43 +1,60 @@
 import heapq
 
 
-def dijkstra(graph, source):
-    # Initialize distances and priority queue
+def dijkstra(graph, start):
+    # Priority queue to store (distance, node)
+    pq = []
+    heapq.heappush(pq, (0, start))
+
+    # Distance dictionary to store the shortest distance to each node
     distances = {node: float('inf') for node in graph}
-    distances[source] = 0
-    priority_queue = [(0, source)]  # (distance, node)
+    distances[start] = 0
 
-    while priority_queue:
-        current_distance, current_node = heapq.heappop(priority_queue)
+    # Dictionary to store the shortest path
+    previous_nodes = {node: None for node in graph}
 
-        # Skip processing if the distance is not optimal
+    while pq:
+        current_distance, current_node = heapq.heappop(pq)
+
+        # If the current distance is greater than the stored distance, skip
         if current_distance > distances[current_node]:
             continue
 
-        # Update neighbors
-        for neighbor, weight in graph[current_node].items():
+        # Explore neighbors
+        for neighbor, weight in graph[current_node]:
             distance = current_distance + weight
+
+            # If a shorter path is found, update distances and push to the queue
             if distance < distances[neighbor]:
                 distances[neighbor] = distance
-                heapq.heappush(priority_queue, (distance, neighbor))
+                previous_nodes[neighbor] = current_node
+                heapq.heappush(pq, (distance, neighbor))
 
-    return distances
+    return distances, previous_nodes
 
 
-# Define the graph as an adjacency list
+# Graph definition
 graph = {
-    's': {'t': 10, 'y': 5, 'x': 9},
-    't': {'x': 1, 'z': 4},
-    'y': {'t': 3, 'z': 2},
-    'x': {'z': 6},
-    'z': {}
+    's': [('t', 3), ('y', 5)],
+    't': [('y', 2), ('x', 6)],
+    'y': [('t', 1), ('x', 4), ('z', 6)],
+    'x': [('z', 2)],
+    'z': [('s', 3), ('x', 7)]
 }
 
-# Compute shortest paths from source 's'
-source = 's'
-shortest_paths = dijkstra(graph, source)
+# Run Dijkstra's algorithm from source node 's'
+distances, previous_nodes = dijkstra(graph, 's')
 
-# Print the results
-print("Shortest distances from source '{}':".format(source))
-for node, distance in shortest_paths.items():
-    print(f"Node {node}: {distance}")
+# Display results
+print("Shortest distances from source 's':")
+for node, distance in distances.items():
+    print(f"{node}: {distance}")
+
+print("\nShortest paths from source 's':")
+for node in previous_nodes:
+    path = []
+    current = node
+    while current is not None:
+        path.insert(0, current)
+        current = previous_nodes[current]
+    print(f"Path to {node}: {' -> '.join(path)}")

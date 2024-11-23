@@ -1,49 +1,52 @@
 def floyd_warshall(graph):
-    # Number of vertices in the graph
-    vertices = len(graph)
+    # Initialize distances as infinity
+    nodes = list(graph.keys())
+    node_indices = {node: idx for idx, node in enumerate(nodes)}
+    n = len(nodes)
 
-    # Initialize the distance and predecessor matrices
-    dist = [[float('inf')] * vertices for _ in range(vertices)]
-    pred = [[None] * vertices for _ in range(vertices)]
+    # Initialize distance and next_node matrices
+    distances = [[float('inf')] * n for _ in range(n)]
+    next_node = [[None] * n for _ in range(n)]
 
-    # Set initial distances and predecessors
-    for i in range(vertices):
-        for j in range(vertices):
-            if i == j:
-                dist[i][j] = 0
-            elif graph[i][j] != float('inf'):
-                dist[i][j] = graph[i][j]
-                pred[i][j] = i + 1  # Store the predecessor (1-indexed)
+    # Distance to self is 0
+    for i in range(n):
+        distances[i][i] = 0
 
-    # Floyd-Warshall Algorithm
-    for k in range(vertices):
-        for i in range(vertices):
-            for j in range(vertices):
-                if dist[i][k] + dist[k][j] < dist[i][j]:
-                    dist[i][j] = dist[i][k] + dist[k][j]
-                    pred[i][j] = pred[k][j]
+    # Add edges to the distance matrix
+    for u in graph:
+        for v, w in graph[u]:
+            i, j = node_indices[u], node_indices[v]
+            distances[i][j] = w
+            next_node[i][j] = v
 
-    return dist, pred
+    # Floyd-Warshall algorithm
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if distances[i][k] + distances[k][j] < distances[i][j]:
+                    distances[i][j] = distances[i][k] + distances[k][j]
+                    next_node[i][j] = next_node[i][k]
 
+    return distances, next_node, nodes
 
-# Define the input graph as an adjacency matrix
-# Use float('inf') to represent no direct edge
-graph = [
-    [0, 3, 8, float('inf'), -4],
-    [float('inf'), 0, float('inf'), 1, 7],
-    [float('inf'), 4, 0, float('inf'), float('inf')],
-    [2, float('inf'), -5, 0, float('inf')],
-    [float('inf'), float('inf'), float('inf'), 6, 0]
-]
+# Print matrix
+def print_matrix(matrix, nodes):
+    print("   ", "  ".join(nodes))
+    for i, row in enumerate(matrix):
+        print(f"{nodes[i]:<3}", "  ".join(f"{val if val != float('inf') else '∞':<3}" for val in row))
 
-# Solve using Floyd-Warshall algorithm
-distances, predecessors = floyd_warshall(graph)
+# Graph definition
+graph = {
+    's': [('t', 3), ('y', 5)],
+    't': [('y', 2), ('x', 6)],
+    'y': [('t', 1), ('x', 4), ('z', 6)],
+    'x': [('z', 2)],
+    'z': [('s', 3), ('x', 7)]
+}
+
+# Run Floyd-Warshall algorithm
+distances, next_node, nodes = floyd_warshall(graph)
 
 # Display results
-print("Distance matrix (D^k):")
-for row in distances:
-    print(row)
-
-print("\nPredecessor matrix (Π^k):")
-for row in predecessors:
-    print(row)
+print("Distance matrix:")
+print_matrix(distances, nodes)
